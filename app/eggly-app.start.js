@@ -22,6 +22,7 @@ angular.module('Eggly', [])
 
         $scope.currentCategory = null;
 
+
         //These functions are also called methods
         //this functions tracks which category we are in and allows the bookmarks to be filtered so only the bookmarks for the category are shown
         function setCurrentCategory(category) {
@@ -61,6 +62,32 @@ angular.module('Eggly', [])
         }
 
         $scope.createBookmark = createBookmark;
+
+        $scope.currentCategory = null;
+
+        function setEditedBookmark(bookmark) {
+            $scope.editedBookmark = angular.copy(bookmark);
+            //the angular copy makes a copy of the value and only updates the view when submit is pressed pasting our copy on to the existing view
+        }
+
+        function updateBookmark(bookmark) {
+            //the lodash is used here. the function compares our edits to the bookmark and updates it
+            var index = _.findIndex($scope.bookmarks, function (b) {
+                return b.id == bookmark.id
+            });
+            $scope.bookmarks[index] = bookmark;
+
+            $scope.editedBookmark = null;
+            $scope.isEditing = false;
+        }
+
+        function isSelectedBookmark(bookmarkId) {
+            return $scope.editedBookmark !== null && $scope.editedBookmark.id === bookmarkId;
+        }
+
+        $scope.setEditedBookmark = setEditedBookmark;
+        $scope.updateBookmark = updateBookmark;
+        $scope.isSelectedBookmark = isSelectedBookmark;
 
         //-----------------------------------------------------
         //    Creating and editing states
