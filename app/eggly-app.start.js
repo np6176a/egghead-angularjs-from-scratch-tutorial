@@ -22,9 +22,19 @@ angular.module('Eggly', [])
 
         $scope.currentCategory = null;
 
+        //These functions are also called methods
+        //this functions tracks which category we are in and allows the bookmarks to be filtered so only the bookmarks for the category are shown
         function setCurrentCategory(category) {
             $scope.currentCategory = category;
         }
 
+        //this uses the tracking of category by current.Category to show which is active or not using ng-class in the html
+        function isCurrentCategory(category) {
+            return $scope.currentCategory !== null && category.name === $scope.currentCategory.name;
+        }
+
+        //this lets the function visible in view
         $scope.setCurrentCategory = setCurrentCategory;
+        $scope.isCurrentCategory = isCurrentCategory;
+
     });
