@@ -44,6 +44,14 @@ angular.module('Eggly', [])
         // CRUD
         //--------------------------------------------
 
+        //to reset the form
+        function resetCreateForm() {
+            $scope.newBookmark = {
+                title: '',
+                url: '',
+                category: $scope.currentCategory.name
+            };
+        }
         //to push the newly created values in the view to the data stored on bookmarks
         function createBookmark(bookmark) {
             bookmark.id = $scope.bookmarks.length;
