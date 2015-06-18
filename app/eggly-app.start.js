@@ -26,6 +26,9 @@ angular.module('Eggly', [])
         //this functions tracks which category we are in and allows the bookmarks to be filtered so only the bookmarks for the category are shown
         function setCurrentCategory(category) {
             $scope.currentCategory = category;
+
+            cancelCreating();
+            cancelEditing();
         }
 
         //this uses the tracking of category by current.Category to show which is active or not using ng-class in the html
@@ -33,8 +36,63 @@ angular.module('Eggly', [])
             return $scope.currentCategory !== null && category.name === $scope.currentCategory.name;
         }
 
-        //this lets the function visible in view
+        //this lets the functions available to be used in view by attaching them to scope
         $scope.setCurrentCategory = setCurrentCategory;
         $scope.isCurrentCategory = isCurrentCategory;
 
+        //--------------------------------------------
+        // CRUD
+        //--------------------------------------------
+
+        //to push the newly created values in the view to the data stored on bookmarks
+        function createBookmark(bookmark) {
+            bookmark.id = $scope.bookmarks.length;
+            $scope.bookmarks.push(bookmark);
+
+            resetCreateForm();
+        }
+
+        $scope.createBookmark = createBookmark;
+
+        //-----------------------------------------------------
+        //    Creating and editing states
+        //------------------------------------------------------
+
+        //the default state
+        $scope.isCreating = false;
+        $scope.isEditing = false;
+
+        //manages the creating and editing functionalities so that both are available at the same time, and one of either is
+        function startCreating() {
+            $scope.isCreating = true;
+            $scope.isEditing = false;
+
+            resetCreateForm();
+        }
+        function cancelCreating() {
+            $scope.isCreating = false;
+        }
+
+        function startEditing() {
+            $scope.isCreating = false;
+            $scope.isEditing = true;
+        }
+        function cancelEditing() {
+            $scope.isEditing = false;
+        }
+
+        function shouldShowCreating() {
+            return $scope.currentCategory && !$scope.isEditing;
+        }
+        function shouldShowEditing() {
+            return $scope.isEditing && !$scope.isCreating;
+        }
+
+        //attaching the functions to scope to allow them to be used in view
+        $scope.startCreating = startCreating;
+        $scope.cancelCreating = cancelCreating;
+        $scope.startEditing = startEditing;
+        $scope.cancelEditing = cancelEditing;
+        $scope.shouldShowCreating = shouldShowCreating;
+        $scope.shouldShowEditing = shouldShowEditing;
     });
